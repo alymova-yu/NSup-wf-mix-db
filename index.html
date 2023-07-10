@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Работа с базой препаратов</title>
+  <meta name="keywords" content="html, css">
+  <meta name="author" content="Юлия Алымова">
+  <link rel="stylesheet" href="./pages/index.css">
+</head>
+
+
+
+<body class="page">
+    <h1 class="header">ТЕСТ</h1>
+    <div class="button_space"> 
+        <button class="button">
+            <h2 class="button_text">Показать всё из базы</h2>
+        </button>
+        <button class="button">
+            <h2 class="button_text">Показать только ПЭП</h2>
+        </button>
+        <button class="button">
+            <h2 class="button_text">Показать олигомерные смеси</h2>
+        </button>
+    </div>
+    <div class="table_space">
+        <table>
+            <tr class="table_row table_row__head">
+                <th class="table_cell table_cell__head">Название</th>
+                <th class="table_cell table_cell__head">Производитель</th>
+                <th class="table_cell table_cell__head">ЭП/ПЭП</th>
+                <th class="table_cell table_cell__head">ККал/мл</th>
+                <th class="table_cell table_cell__head">Белков/мл</th>
+                <th class="table_cell table_cell__head">Жиров/мл</th>
+                <th class="table_cell table_cell__head">Углеводов/мл</th>
+            </tr>
+            { for nutr in nutritions}
+            <tr class="table_row table_row__item">
+                <td class="table_cell table_cell__item">{{nutr["name"]}}</td>
+                <td class="table_cell table_cell__item">Нестле</td>
+                <td class="table_cell table_cell__item">ЭП</td>
+                <td class="table_cell table_cell__item">1</td>
+                <td class="table_cell table_cell__item">3</td>
+                <td class="table_cell table_cell__item">5</td>
+                <td class="table_cell table_cell__item">12</td>
+            </tr>
+            { endfor }
+            <tr class="table_row table_row__item">
+                <td class="table_cell table_cell__item">Нутрини</td>
+                <td class="table_cell table_cell__item">Нутриция</td>
+                <td class="table_cell table_cell__item">ЭП</td>
+                <td class="table_cell table_cell__item">1</td>
+                <td class="table_cell table_cell__item">3,5</td>
+                <td class="table_cell table_cell__item">3</td>
+                <td class="table_cell table_cell__item">14</td>
+            </tr>
+        </table>
+    </div>
+
+    <form action="name.py" method="get">
+        <p>
+          <label for="name">Введите имя:</label>
+          <input type="text" name="name" id="name" required>
+        </p>
+        <p>
+          <label for="email">Введите email:</label>
+          <input type="email" name="email" id="email" required>
+        </p>
+        <button type="submit">Показать</button>
+      </form>
+
+
+
+
+
+</body>
