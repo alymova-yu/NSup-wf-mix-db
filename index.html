@@ -35,7 +35,7 @@
                 <th class="table_cell table_cell__head">Жиров/мл</th>
                 <th class="table_cell table_cell__head">Углеводов/мл</th>
             </tr>
-            { for nutr in nutritions}
+            { for nutr in nutritions} <!-- все, что в фигурных скобках тут и далее - для шаблона Flask -->
             <tr class="table_row table_row__item">
                 <td class="table_cell table_cell__item">{{nutr["name"]}}</td>
                 <td class="table_cell table_cell__item">Нестле</td>
@@ -46,7 +46,7 @@
                 <td class="table_cell table_cell__item">12</td>
             </tr>
             { endfor }
-            <tr class="table_row table_row__item">
+            <tr class="table_row table_row__item"> <!-- эта строка таблицы - просто пример -->
                 <td class="table_cell table_cell__item">Нутрини</td>
                 <td class="table_cell table_cell__item">Нутриция</td>
                 <td class="table_cell table_cell__item">ЭП</td>
@@ -58,7 +58,7 @@
         </table>
     </div>
 
-    <form action="name.py" method="get">
+    <form action="Zakhar.py" method="get" name="filter">
         <p>
           <label for="name">Введите имя:</label>
           <input type="text" name="name" id="name" required>
