@@ -1,77 +1,157 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Работа с базой препаратов</title>
-  <meta name="keywords" content="html, css">
-  <meta name="author" content="Юлия Алымова">
-  <link rel="stylesheet" href="./pages/index.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Работа с базой препаратов</title>
+    <meta name="keywords" content="html, css" />
+    <meta name="author" content="Юлия Алымова" />
+    <link rel="stylesheet" href="./pages/index.css" />
+  </head>
 
+  <body class="page">
+    <h1 class="header">Наличие смесей/растворов в клинике</h1>
 
+    <h2 class="subheader">Фильтр для отображения</h2>
 
-<body class="page">
-    <h1 class="header">ТЕСТ</h1>
-    <div class="button_space"> 
-        <button class="button">
-            <h2 class="button_text">Показать всё из базы</h2>
-        </button>
-        <button class="button">
-            <h2 class="button_text">Показать только ПЭП</h2>
-        </button>
-        <button class="button">
-            <h2 class="button_text">Показать олигомерные смеси</h2>
-        </button>
-    </div>
+    <form class="form" action="Zakhar.py" method="get" name="filter">
+      <!-- файл для обработки запроса (Zakhar.py) привязывается тут -->
+      <div class="filter">
+        <div class="filter_element">
+          <label class="filter_element__label" for="nutrition_type"
+            >Показывать ЭП или ПЭП</label
+          >
+          <select
+            class="filter_element__select"
+            name="nutrition_type"
+            id="nutrition_type"
+          >
+            <option value="both">все</option>
+            <option value="en">только ЭП (смеси)</option>
+            <option value="pen">только ПЭП (растворы)</option>
+          </select>
+        </div>
+        <div class="filter_element">
+          <label class="filter_element__label" for="caloric"
+            >ЭП по калорической плотности</label
+          >
+          <select class="filter_element__select" name="caloric" id="caloric">
+            <option value="both">все</option>
+            <option value="iso">изокалорические</option>
+            <option value="hyper">гиперкалорические</option>
+            <option value="hypo">гипокалорические</option>
+          </select>
+        </div>
+        <div class="filter_element">
+          <label class="filter_element__label" for="polymer"
+            >ЭП по полимерности</label
+          >
+          <select class="filter_element__select" name="polymer" id="polymer">
+            <option value="both">все</option>
+            <option value="poly">полимерные</option>
+            <option value="olyg">олигомерные</option>
+          </select>
+        </div>
+        <div class="filter_element">
+          <label class="filter_element__label" for="polymer">ЭП per os</label>
+          <select class="filter_element__select" name="polymer" id="polymer">
+            <option value="both">все</option>
+            <option value="poly">сипинг</option>
+            <option value="olyg">зонд/стома</option>
+          </select>
+        </div>
+        <div class="filter_element">
+          <label class="filter_element__label" for="polymer"
+            >ЭП по специализации</label
+          >
+          <select class="filter_element__select" name="polymer" id="polymer">
+            <option value="both">все</option>
+            <option value="poly">стандартные</option>
+            <option value="olyg">нефро</option>
+            <option value="olyg">гепа</option>
+            <option value="olyg">пульмо</option>
+            <option value="olyg">диабет</option>
+          </select>
+        </div>
+        <div class="filter_element">
+          <label class="filter_element__label" for="polymer"
+            >ЭП по наличию пищевых волокон</label
+          >
+          <select class="filter_element__select" name="polymer" id="polymer">
+            <option value="both">все</option>
+            <option value="poly">с ПВ</option>
+            <option value="olyg">без ПВ</option>
+          </select>
+        </div>
+      </div>
+      <button class="button form_button form_button__filter" type="submit">
+        <h2 class="button_text">Показать</h2>
+      </button>
+    </form>
+
+    <h2 class="subheader">Смеси/растворы из базы:</h2>
+
     <div class="table_space">
-        <table>
-            <tr class="table_row table_row__head">
-                <th class="table_cell table_cell__head">Название</th>
-                <th class="table_cell table_cell__head">Производитель</th>
-                <th class="table_cell table_cell__head">ЭП/ПЭП</th>
-                <th class="table_cell table_cell__head">ККал/мл</th>
-                <th class="table_cell table_cell__head">Белков/мл</th>
-                <th class="table_cell table_cell__head">Жиров/мл</th>
-                <th class="table_cell table_cell__head">Углеводов/мл</th>
-            </tr>
-            { for nutr in nutritions} <!-- все, что в фигурных скобках тут и далее - для шаблона Flask -->
-            <tr class="table_row table_row__item">
-                <td class="table_cell table_cell__item">{{nutr["name"]}}</td>
-                <td class="table_cell table_cell__item">Нестле</td>
-                <td class="table_cell table_cell__item">ЭП</td>
-                <td class="table_cell table_cell__item">1</td>
-                <td class="table_cell table_cell__item">3</td>
-                <td class="table_cell table_cell__item">5</td>
-                <td class="table_cell table_cell__item">12</td>
-            </tr>
-            { endfor }
-            <tr class="table_row table_row__item"> <!-- эта строка таблицы - просто пример -->
-                <td class="table_cell table_cell__item">Нутрини</td>
-                <td class="table_cell table_cell__item">Нутриция</td>
-                <td class="table_cell table_cell__item">ЭП</td>
-                <td class="table_cell table_cell__item">1</td>
-                <td class="table_cell table_cell__item">3,5</td>
-                <td class="table_cell table_cell__item">3</td>
-                <td class="table_cell table_cell__item">14</td>
-            </tr>
+      <form class="form" action="Zakhar.py" method="post">
+        <!-- файл для обработки запроса (Zakhar.py) привязывается еще и тут -->
+        <table class="table">
+          <tr class="table_row table_row__head">
+            <th class="table_cell table_cell__head">Название</th>
+            <th class="table_cell table_cell__head">Производитель</th>
+            <th class="table_cell table_cell__head">ЭП/ПЭП</th>
+            <th class="table_cell table_cell__head">ККал/мл</th>
+            <th class="table_cell table_cell__head">Белков/мл</th>
+            <th class="table_cell table_cell__head">Жиров/мл</th>
+            <th class="table_cell table_cell__head">Углеводов/мл</th>
+            <th class="table_cell table_cell__head">Наличие в клинике</th>
+          </tr>
+          { for nutr in nutritions}
+          <!-- все, что в фигурных скобках тут и далее - для шаблона Flask -->
+          <tr class="table_row table_row__item">
+            <td class="table_cell table_cell__item">{{nutr["name"]}}</td>
+            <td class="table_cell table_cell__item">
+              {{nutr["manufacturer"]}}
+            </td>
+            <td class="table_cell table_cell__item">
+              ПЭП/ЭП - из {{nutr["is_enteral"]}}
+            </td>
+            <td class="table_cell table_cell__item">1</td>
+            <td class="table_cell table_cell__item">3</td>
+            <td class="table_cell table_cell__item">5</td>
+            <td class="table_cell table_cell__item">7</td>
+            <td class="table_cell table_cell__item">
+              <input
+                type="checkbox"
+                checked="TRUE"
+                name="presence"
+                value="TRUE"
+              />
+              <!-- в checked как-то надо передать T/F из базы nutr["is_available"], в случае 1
+            в шаблоне должен быть атрибут checked="TRUE", в случае 0 - вообще убрать эту строку, т.к со
+        значением False он без JS не работает...  -->
+            </td>
+          </tr>
+          { endfor }
+          <tr class="table_row table_row__item">
+            <!-- эта строка таблицы - просто пример -->
+            <td class="table_cell table_cell__item">Нутрини</td>
+            <td class="table_cell table_cell__item">Нутриция</td>
+            <td class="table_cell table_cell__item">ЭП</td>
+            <td class="table_cell table_cell__item">1</td>
+            <td class="table_cell table_cell__item">3,5</td>
+            <td class="table_cell table_cell__item">3</td>
+            <td class="table_cell table_cell__item">14</td>
+            <td class="table_cell table_cell__item">
+              <form action="Zakhar.py" method="post">
+                <input type="checkbox" name="presence" value="TRUE" />
+              </form>
+            </td>
+          </tr>
         </table>
-    </div>
-
-    <form action="Zakhar.py" method="get" name="filter">
-        <p>
-          <label for="name">Введите имя:</label>
-          <input type="text" name="name" id="name" required>
-        </p>
-        <p>
-          <label for="email">Введите email:</label>
-          <input type="email" name="email" id="email" required>
-        </p>
-        <button type="submit">Показать</button>
+        <button class="button form_button" type="submit">
+          <h2 class="button_text">Сохранить в базу</h2>
+        </button>
       </form>
-
-
-
-
-
-</body>
+    </div>
+  </body>
+</html>
