@@ -14,17 +14,17 @@
 
     <h2 class="subheader">Фильтр для отображения</h2>
 
-    <form class="form" action="Zakhar.py" method="get" name="filter">
+    <form class="form" action="index.html" method="get" name="filter">
       <!-- файл для обработки запроса (Zakhar.py) привязывается тут -->
       <div class="filter">
         <div class="filter_element">
-          <label class="filter_element__label" for="nutrition_type"
+          <label class="filter_element__label" for="nutr_type"
             >Показывать ЭП или ПЭП</label
           >
           <select
             class="filter_element__select"
-            name="nutrition_type"
-            id="nutrition_type"
+            name="nutr_type"
+            id="nutr_type"
           >
             <option value="both">все</option>
             <option value="en">только ЭП (смеси)</option>
@@ -53,34 +53,34 @@
           </select>
         </div>
         <div class="filter_element">
-          <label class="filter_element__label" for="polymer">ЭП per os</label>
-          <select class="filter_element__select" name="polymer" id="polymer">
+          <label class="filter_element__label" for="sip_tube">ЭП per os</label>
+          <select class="filter_element__select" name="sip_tube" id="sip_tube">
             <option value="both">все</option>
-            <option value="poly">сипинг</option>
-            <option value="olyg">зонд/стома</option>
+            <option value="sip">сипинг</option>
+            <option value="tube">зонд/стома</option>
           </select>
         </div>
         <div class="filter_element">
-          <label class="filter_element__label" for="polymer"
+          <label class="filter_element__label" for="spec"
             >ЭП по специализации</label
           >
-          <select class="filter_element__select" name="polymer" id="polymer">
+          <select class="filter_element__select" name="spec" id="spec">
             <option value="both">все</option>
-            <option value="poly">стандартные</option>
-            <option value="olyg">нефро</option>
-            <option value="olyg">гепа</option>
-            <option value="olyg">пульмо</option>
-            <option value="olyg">диабет</option>
+            <option value="stand">стандартные</option>
+            <option value="renal">нефро</option>
+            <option value="hepa">гепа</option>
+            <option value="pulm">пульмо</option>
+            <option value="diab">диабет</option>
           </select>
         </div>
         <div class="filter_element">
-          <label class="filter_element__label" for="polymer"
+          <label class="filter_element__label" for="fiber"
             >ЭП по наличию пищевых волокон</label
           >
-          <select class="filter_element__select" name="polymer" id="polymer">
+          <select class="filter_element__select" name="fiber" id="fiber">
             <option value="both">все</option>
-            <option value="poly">с ПВ</option>
-            <option value="olyg">без ПВ</option>
+            <option value="fiber">с ПВ</option>
+            <option value="no_fiber">без ПВ</option>
           </select>
         </div>
       </div>
@@ -99,10 +99,11 @@
             <th class="table_cell table_cell__head">Название</th>
             <th class="table_cell table_cell__head">Производитель</th>
             <th class="table_cell table_cell__head">ЭП/ПЭП</th>
-            <th class="table_cell table_cell__head">ККал/мл</th>
-            <th class="table_cell table_cell__head">Белков/мл</th>
-            <th class="table_cell table_cell__head">Жиров/мл</th>
-            <th class="table_cell table_cell__head">Углеводов/мл</th>
+            <th class="table_cell table_cell__head">ККал в 100 мл</th>
+            <th class="table_cell table_cell__head table_cell_n">Белков в 100 мл</th>
+            <th class="table_cell table_cell__head table_cell_n">Жиров в 100 мл</th>
+            <th class="table_cell table_cell__head table_cell_n">Углеводов в 100 мл</th>
+            <th class="table_cell table_cell__head">Характеристики</th>
             <th class="table_cell table_cell__head">Наличие в клинике</th>
           </tr>
           
@@ -116,10 +117,11 @@
             <td class="table_cell table_cell__item">
               ПЭП/ЭП - из {{nutr["is_enteral"]}}
             </td>
-            <td class="table_cell table_cell__item">1</td>
+            <td class="table_cell table_cell__item">nutrition_feature_value - 16/49</td>
             <td class="table_cell table_cell__item">3</td>
             <td class="table_cell table_cell__item">5</td>
             <td class="table_cell table_cell__item">7</td>
+            <td class="table_cell table_cell__item">изокалорическая, олигомерная, сипинг/зонд, стандартная, без ПВ</td>
             <td class="table_cell table_cell__item">
               <input
                 type="checkbox"
@@ -142,7 +144,9 @@
             <td class="table_cell table_cell__item">3,5</td>
             <td class="table_cell table_cell__item">3</td>
             <td class="table_cell table_cell__item">14</td>
+            <td class="table_cell table_cell__item">изокалорическая, полимерная, сипинг/зонд, стандартная, без ПВ</td>
             <td class="table_cell table_cell__item">
+            <!-- эта строка таблицы - просто пример -->
               <form action="Zakhar.py" method="post">
                 <input type="checkbox" name="presence" value="TRUE" />
               </form>

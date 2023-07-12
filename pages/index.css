@@ -28,7 +28,7 @@
   margin: 0;
   margin-bottom: 30px;
   padding: 0;
-  width: 80vw;
+  width: 85vw;
 }
 
 .table {
@@ -118,4 +118,8 @@
 
 .button:active {
   background-color: black;
+}
+
+.table_cell_n {
+  width: 100px;
 }
