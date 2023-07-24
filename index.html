@@ -92,8 +92,7 @@
     <h2 class="subheader">Смеси/растворы из базы:</h2>
 
     <div class="table_space">
-      <form class="form" action="Zakhar.py" method="post">
-        <!-- файл для обработки запроса (Zakhar.py) привязывается еще и тут -->
+      <form class="form" action="......." method="post">
         <table class="table">
           <tr class="table_row table_row__head">
             <th class="table_cell table_cell__head">Название</th>
@@ -107,51 +106,40 @@
             <th class="table_cell table_cell__head">Наличие в клинике</th>
           </tr>
           
-          { for nutr in nutritions}
-          <!-- все, что в фигурных скобках тут и далее - для шаблона Flask -->
+          { for nutr in nutritions }
           <tr class="table_row table_row__item">
-            <td class="table_cell table_cell__item">{{nutr["name"]}}</td>
+            <td class="table_cell table_cell__item">{{название}}</td>
             <td class="table_cell table_cell__item">
-              {{nutr["manufacturer"]}}
+              {{производитель}}
             </td>
             <td class="table_cell table_cell__item">
-              ПЭП/ЭП - из {{nutr["is_enteral"]}}
+              {{is enteral}}
             </td>
-            <td class="table_cell table_cell__item">nutrition_feature_value - 16/49</td>
-            <td class="table_cell table_cell__item">3</td>
-            <td class="table_cell table_cell__item">5</td>
-            <td class="table_cell table_cell__item">7</td>
-            <td class="table_cell table_cell__item">изокалорическая, олигомерная, сипинг/зонд, стандартная, без ПВ</td>
+            <td class="table_cell table_cell__item">
+              {{ккал в мл}}
+            </td>
+            <td class="table_cell table_cell__item">
+              {{белков в мл}}
+            </td>
+            <td class="table_cell table_cell__item">
+              {{жиров в мл}}
+            </td>
+            <td class="table_cell table_cell__item">
+              {{углеводов в мл}}
+            </td>
+            <td class="table_cell table_cell__item">{{ изокалорическая, олигомерная, сипинг/зонд, стандартная, без ПВ }}</td>
             <td class="table_cell table_cell__item">
               <input
                 type="checkbox"
-                checked="TRUE"
+                {{ checked="TRUE" }}
                 name="presence"
                 value="TRUE"
               />
               <!-- в checked как-то надо передать T/F из базы nutr["is_available"], в случае 1
-            в шаблоне должен быть атрибут checked="TRUE", в случае 0 - вообще убрать эту строку, т.к со
-        значением False он без JS не работает...  -->
+            в шаблоне должен быть атрибут checked="TRUE", в случае 0 - в фигурных скобках ничего не должно быть...  -->
             </td>
           </tr>
           { endfor }
-          <tr class="table_row table_row__item">
-            <!-- эта строка таблицы - просто пример -->
-            <td class="table_cell table_cell__item">Нутрини</td>
-            <td class="table_cell table_cell__item">Нутриция</td>
-            <td class="table_cell table_cell__item">ЭП</td>
-            <td class="table_cell table_cell__item">1</td>
-            <td class="table_cell table_cell__item">3,5</td>
-            <td class="table_cell table_cell__item">3</td>
-            <td class="table_cell table_cell__item">14</td>
-            <td class="table_cell table_cell__item">изокалорическая, полимерная, сипинг/зонд, стандартная, без ПВ</td>
-            <td class="table_cell table_cell__item">
-            <!-- эта строка таблицы - просто пример -->
-              <form action="Zakhar.py" method="post">
-                <input type="checkbox" name="presence" value="TRUE" />
-              </form>
-            </td>
-          </tr>
         </table>
         <button class="button form_button" type="submit">
           <h2 class="button_text">Сохранить в базу</h2>

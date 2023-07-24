@@ -8,11 +8,13 @@
   align-items: center;
   justify-content: start;
   font-family: Inter;
+  text-align: center;
 }
 
 .header {
   margin: 50px 0 0 0;
   padding: 0;
+  text-align: center;
 }
 
 .subheader {
@@ -23,6 +25,7 @@
 .table_space {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
   margin: 0;
@@ -51,9 +54,12 @@
 }
 
 .filter {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-items: center;
+  align-items: end;
   width: 75vw;
 }
 .filter_element {
@@ -64,7 +70,16 @@
   margin: 0;
   padding: 0;
   margin-top: 15px;
-  width: 26%;
+  width: 80%;
+  max-width: 300px;
+}
+.filter_element__label{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-self: center;
+  text-align: center;
 }
 
 .table_cell__item:last-child {
