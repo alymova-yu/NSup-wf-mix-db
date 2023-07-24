@@ -106,7 +106,7 @@
             <th class="table_cell table_cell__head">Наличие в клинике</th>
           </tr>
           
-          { for nutr in nutritions }
+          {% for nutr in nutritions %}
           <tr class="table_row table_row__item">
             <td class="table_cell table_cell__item">{{название}}</td>
             <td class="table_cell table_cell__item">
@@ -139,7 +139,7 @@
             в шаблоне должен быть атрибут checked="TRUE", в случае 0 - в фигурных скобках ничего не должно быть...  -->
             </td>
           </tr>
-          { endfor }
+          {% endfor %}
         </table>
         <button class="button form_button" type="submit">
           <h2 class="button_text">Сохранить в базу</h2>
