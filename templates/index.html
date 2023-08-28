@@ -6,6 +6,8 @@
     <title>Работа с базой препаратов</title>
     <meta name="keywords" content="html, css" />
     <meta name="author" content="Юлия Алымова" />
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/normalize.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/fonts.css') }}">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
   </head>
 
@@ -15,7 +17,6 @@
     <h2 class="subheader">Фильтр для отображения</h2>
 
     <form class="form" action="{{ url_for('get_par_nutr') }}" method="get" name="filter">
-      <!-- файл для обработки запроса (Zakhar.py) привязывается тут -->
       <div class="filter">
         <div class="filter_element">
           <label class="filter_element__label" for="nutr_type"
@@ -135,8 +136,6 @@
                 name="CHECKED"
                 value={{nutr[0]}}
               />
-              <!-- в checked как-то надо передать T/F из базы nutr["is_available"], в случае 1
-            в шаблоне должен быть атрибут checked="TRUE", в случае 0 - в фигурных скобках ничего не должно быть...  -->
             </td>
           </tr>
           {% endfor %}
