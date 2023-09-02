@@ -1,4 +1,60 @@
-<div class="window" style="position: fixed; width: 100vw; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.75);"> 
-    <div style="width: 80vw; height: 40vh; display: flex; flex-direction: column; justify-content: space-around; align-items: center; background-color: white;"> <p style="font-size: 24px;">Такие данные в Базе Данных отсутствуют!</p> 
-    <a href="/" style="color: aliceblue; text-decoration: none;"><div style="padding: 15px 23px; background-color: blue; color: aliceblue;" onmouseover="this.style.backgroundColor='black';" onmouseout="this.style.backgroundColor='blue';">Назад</div></a></div></div> 
-  </div>
+  <!DOCTYPE html>
+  <html lang="ru">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Работа с базой препаратов</title>
+      <meta name="keywords" content="html, css" />
+      <meta name="author" content="Юлия Алымова" />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static',filename='styles/normalize.css') }}"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static',filename='styles/fonts.css') }}"
+      />
+    </head>
+  
+    <body>
+      <div
+        class="window"
+        style="
+          font-family: Inter;
+          position: fixed;
+          width: 100vw;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: rgba(255, 255, 255, 0.75);
+        "
+      >
+        <div
+          style="
+            width: 80vw;
+            height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            background-color: white;
+          "
+        >
+          <p style="font-size: 24px">Такие препараты отсутствуют в базе</p>
+          <a href="/" style="color: aliceblue; text-decoration: none">
+            <div
+              style="padding: 15px 23px; background-color: blue; color: aliceblue"
+              onmouseover="this.style.backgroundColor='black';"
+              onmouseout="this.style.backgroundColor='blue';"
+            >
+              Назад
+            </div>
+          </a>
+        </div>
+      </div>
+    </body>
+  </html>
+  
