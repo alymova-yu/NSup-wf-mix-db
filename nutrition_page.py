@@ -1,4 +1,3 @@
-
 from flask import Flask, redirect, url_for, render_template, request
 import pandas as pd
 import numpy as np
@@ -14,73 +13,6 @@ def get_nutrient_tags ():
 #Функия для получения таблицы пищевой и энергетической ценностей для каждого нутриента
 def get_PFCE_mash_positive ():
     return ('select DISTINCT n2.nutrient_id, n1.id as feature_id, n1.name, n2.value from nutrition_feature n1 INNER JOIN nutrition_feature_value n2 on n1.id=n2.feature_id where id in (16, 46, 29, 49, 50, 51, 13, 48);')
-
-def db_nutr_table_app(is_enternal,caloric,polim,sip_tube,special,vol):
-    #from util_db_nutr import get_by_tags, get_nutrient_tags, get_PFCE_mash_positive
-    import mysql.connector
-    from mysql.connector import connect, Error
-    import pandas as pd
-    from pandas import DataFrame
-    ## Подключаемся к БД nutrition
-    DB_NAME = "oncology_nutrition"
-    DB_USER = "nutrition_list"
-    DB_PASSWD = "nutrListWhiteForest"
-    DB_HOST = "projectswhynot.site"
-    connection = connect(host=DB_HOST,
-                    user=DB_USER,
-                    password=DB_PASSWD,
-                    database=DB_NAME,
-                    port=11459)
-    cursor = connection.cursor()
-    cursor.execute(get_by_tags(polim,caloric,special,vol,is_enternal, sip_tube))
-
-    nutr_search_res = DataFrame(cursor.fetchall())
-    nutr_search_res.columns = cursor.column_names
-
-    cursor.execute(get_nutrient_tags())
-
-    nutr_tags = DataFrame(cursor.fetchall())
-    nutr_tags.columns = cursor.column_names
-
-    cursor.execute(get_PFCE_mash_positive())
-
-    PFCE_values_mash= DataFrame(cursor.fetchall())
-    PFCE_values_mash.columns = cursor.column_names
-
-    ##Слияние датавреймов чтобы было нормально и читаемо
-    P_values=PFCE_values_mash[PFCE_values_mash['name']=='Белок/100мл']
-    F_values=PFCE_values_mash[PFCE_values_mash['name']=='Жиры/100мл']
-    C_values=PFCE_values_mash[PFCE_values_mash['name']=='Углеводы/100мл']
-    E_values=PFCE_values_mash[(PFCE_values_mash['name']=='Ккал/100мл') | (PFCE_values_mash['name']=='ККал/100мл')]
-    PFCE_values=pd.merge(pd.merge(P_values,F_values,on='nutrient_id'),pd.merge(C_values,E_values,on='nutrient_id'),on='nutrient_id')
-
-    ##Слияние всего в сводную таблицу
-    data=pd.merge(pd.merge(nutr_search_res,PFCE_values,on='nutrient_id'),nutr_tags,on='nutrient_id')
-    data=data.rename(columns={"name": "Название", "manufacturer": "Производитель", "is_enteral": "ЭП/ПЭП", "value_x_x":"Белков в 100 мл", "value_y_x":"Жиров в 100 мл","value_x_y":"Углеводов в 100 мл","value_y_y":"ККал в 100 мл", "all tags": "Характеристики","is_available": "Наличие в клинике"})
-    data=data.drop(['feature_id_x_x', 'name_x_x','nutrient_id','feature_id_y_x', 'name_y_x', 'feature_id_x_y', 'name_x_y','feature_id_y_y', 'name_y_y'], axis=1)
-    cols=['Название',
-    'Производитель',
-    'ЭП/ПЭП',
-    'Белков в 100 мл',
-    'Жиров в 100 мл',
-    'Углеводов в 100 мл',
-    'ККал в 100 мл',
-    'Характеристики',
-    'Наличие в клинике']
-    data = data[cols]
-
-    ## Делаем nutr удобоваримым для POST
-    nutr=[]
-    for i in range(len(data)):
-        nutr.append(list(data.iloc[i]))
-
-    from flask import Flask, request, render_template
-    app = Flask(__name__)
-    @app.route('/', methods =["GET"])
-    def index():
-        return render_template("index1.html", nutritions=nutr)
-    if __name__=='__main__':
-        app.run()
 
 def read_params(input_str):
     is_enternal={
@@ -149,11 +81,20 @@ def db_nutr_table(is_enternal,caloric,polim,sip_tube,special,vol):
                     password=DB_PASSWD,
                     database=DB_NAME,
                     port=11459)
-    cursor = connection.cursor()
-    cursor.execute(get_by_tags(polim,caloric,special,vol,is_enternal, sip_tube))
-
-    nutr_search_res = DataFrame(cursor.fetchall())
-    nutr_search_res.columns = cursor.column_names
+    if "1" in is_enternal:
+        cursor = connection.cursor()
+        cursor.execute(get_by_tags(polim,caloric,special,vol,"1", sip_tube))
+        nutr_search_res_enternal = DataFrame(cursor.fetchall())
+        nutr_search_res_enternal.columns = cursor.column_names
+    else: 
+        nutr_search_res_enternal = pd.DataFrame()
+    if "0" in is_enternal:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT DISTINCT n0.id as nutrient_id, n0.name, n0.manufacturer, n0.is_enteral, n0.is_available FROM `nutrition` as n0 WHERE n0.is_enteral = 0;")
+        nutr_search_res_not_enternal = DataFrame(cursor.fetchall())
+        nutr_search_res_not_enternal.columns = cursor.column_names 
+    else:
+        nutr_search_res_not_enternal = pd.DataFrame()
 
     cursor.execute(get_nutrient_tags())
 
@@ -173,10 +114,23 @@ def db_nutr_table(is_enternal,caloric,polim,sip_tube,special,vol):
     PFCE_values=pd.merge(pd.merge(P_values,F_values,on='nutrient_id'),pd.merge(C_values,E_values,on='nutrient_id'),on='nutrient_id')
 
     ##Слияние всего в сводную таблицу
-    data=pd.merge(pd.merge(nutr_search_res,PFCE_values,on='nutrient_id'),nutr_tags,on='nutrient_id')
-    data=data.drop(['feature_id_x_x', 'name_x_x', 'feature_id_y_x', 'name_y_x', 'feature_id_x_y', 'name_x_y','feature_id_y_y', 'name_y_y'], axis=1)
-    data.to_csv("data.csv", index=False)
-    data=data.rename(columns={'nutrient_id': "ID", "name": "Название", "manufacturer": "Производитель", "is_enteral": "ЭП/ПЭП", "value_x_x":"Белков в 100 мл", "value_y_x":"Жиров в 100 мл","value_x_y":"Углеводов в 100 мл","value_y_y":"ККал в 100 мл", "all tags": "Характеристики","is_available": "Наличие в клинике"})
+    if not nutr_search_res_enternal.empty:
+        data=pd.merge(pd.merge(nutr_search_res_enternal,PFCE_values,on='nutrient_id'),nutr_tags,on='nutrient_id')
+        data=data.drop(['feature_id_x_x', 'name_x_x', 'feature_id_y_x', 'name_y_x', 'feature_id_x_y', 'name_x_y','feature_id_y_y', 'name_y_y'], axis=1)
+    if not nutr_search_res_not_enternal.empty:
+        nutr_search_res_not_enternal_merged=pd.merge(nutr_search_res_not_enternal,PFCE_values,on='nutrient_id')
+        nutr_search_res_not_enternal_merged=nutr_search_res_not_enternal_merged.drop(['feature_id_x_x', 'name_x_x', 'feature_id_y_x', 'name_y_x', 'feature_id_x_y', 'name_x_y','feature_id_y_y', 'name_y_y'], axis=1)
+
+    if nutr_search_res_enternal.empty:
+        data_final=nutr_search_res_not_enternal_merged
+        data_final["all tags"] = ''
+    elif nutr_search_res_not_enternal.empty:
+        data_final=data
+    else:
+        data_final=pd.concat([data, nutr_search_res_not_enternal_merged], axis=0)
+
+    data_final.to_csv("data.csv", index=False)
+    data_final=data_final.rename(columns={'nutrient_id': "ID", "name": "Название", "manufacturer": "Производитель", "is_enteral": "ЭП/ПЭП", "value_x_x":"Белков в 100 мл", "value_y_x":"Жиров в 100 мл","value_x_y":"Углеводов в 100 мл","value_y_y":"ККал в 100 мл", "all tags": "Характеристики","is_available": "Наличие в клинике"})
     cols=["ID", 'Название',
     'Производитель',
     'ЭП/ПЭП',
@@ -186,13 +140,10 @@ def db_nutr_table(is_enternal,caloric,polim,sip_tube,special,vol):
     'ККал в 100 мл',
     'Характеристики',
     'Наличие в клинике']
-    data = data[cols]
+    data_final = data_final[cols]
+    
 
-    return data
-
-    table=pd.read_csv("data.csv")
-    all_ids = table['nutrient_id'].tolist()
-    return all_ids
+    return data_final
 
 app = Flask(__name__)
 
@@ -202,27 +153,30 @@ def home():
 global test
 @app.route("/get_par_nutr", methods=["POST", "GET"])
 def get_par_nutr():
-    if request.method == "POST":
-        nutr_type = request.form.get["nutr_type"]
-        caloric = request.form.get["caloric"]
-        polymer = request.form.get["polymer"]
-        sip_tube = request.form.get["sip_tube"]
-        spec = request.form.get["spec"]
-        fiber = request.form.get["fiber"]
-        result=f"{nutr_type+caloric}"
-        return f"{nutr_type} + {caloric} + {polymer}+ {sip_tube} + {spec} + {fiber}"
-    else: 
-        nutr_type = request.args.get("nutr_type")
-        caloric = request.args.get("caloric")
-        polymer = request.args.get("polymer")
-        sip_tube = request.args.get("sip_tube")
-        spec = request.args.get("spec")
-        fiber = request.args.get("fiber")
-        test=db_nutr_table(*read_params(f"{nutr_type},{caloric},{polymer},{sip_tube},{spec},{fiber}"))
-        nutr=[]
-        for i in range(len(test)):
-            nutr.append(list(test.iloc[i]))
-        return render_template("index.html", nutritions=nutr)
+    try:
+        if request.method == "POST":
+            nutr_type = request.form.get["nutr_type"]
+            caloric = request.form.get["caloric"]
+            polymer = request.form.get["polymer"]
+            sip_tube = request.form.get["sip_tube"]
+            spec = request.form.get["spec"]
+            fiber = request.form.get["fiber"]
+            result=f"{nutr_type+caloric}"
+            return f"{nutr_type} + {caloric} + {polymer}+ {sip_tube} + {spec} + {fiber}"
+        else: 
+            nutr_type = request.args.get("nutr_type")
+            caloric = request.args.get("caloric")
+            polymer = request.args.get("polymer")
+            sip_tube = request.args.get("sip_tube")
+            spec = request.args.get("spec")
+            fiber = request.args.get("fiber")
+            test=db_nutr_table(*read_params(f"{nutr_type},{caloric},{polymer},{sip_tube},{spec},{fiber}"))
+            nutr=[]
+            for i in range(len(test)):
+                nutr.append(list(test.iloc[i]))
+            return render_template("index.html", nutritions=nutr)
+    except:
+        return render_template("error_page.html")
 
 @app.route("/update_db_nutr", methods=["POST"])
 def update_db_nutr():
