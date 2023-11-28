@@ -9,7 +9,6 @@ def get_by_tags (polim,caloric,special,vol,is_enternal, sip_tube):
 #Функия для получения таблицы со списокм всех тэгов, конкатенированных для каждого нутриента
 def get_nutrient_tags ():
     return ('select n1.nutrient_id, GROUP_CONCAT(CONCAT(n2.tag)) as "all tags" from nutrition_tagging n1 INNER JOIN nutrition_tag n2 ON n1.tag_id=n2.id GROUP BY n1.nutrient_id;')
-
 #Функия для получения таблицы пищевой и энергетической ценностей для каждого нутриента
 def get_PFCE_mash_positive ():
     return ('select DISTINCT n2.nutrient_id, n1.id as feature_id, n1.name, n2.value from nutrition_feature n1 INNER JOIN nutrition_feature_value n2 on n1.id=n2.feature_id where id in (16, 46, 29, 49, 50, 51, 13, 48);')
@@ -23,8 +22,8 @@ def read_params(input_str):
     caloric={
     "both":'5,6,7',
     "iso":"5",
-    "hyper":"6",
-    "hypo":"7"
+    "hyper":"7",
+    "hypo":"6"
     }
 
     polim={
@@ -36,16 +35,16 @@ def read_params(input_str):
     sip_tube={
         "both":"1,2",
         "sip":"1",
-        "tubr":"2"
+        "tube":"2"
     }
 
     special={
     "both":"21, 10, 11, 12, 13",
-    "stand":"10",
+    "stand":"21",
     "renal":"11",
-    "hepa":"12",
-    "pulm":"13",
-    "diab":"14"
+    "hepa":"10",
+    "pulm":"12",
+    "diab":"13"
     }
     vol={
     "both":'8,9',
@@ -88,7 +87,7 @@ def db_nutr_table(is_enternal,caloric,polim,sip_tube,special,vol):
         nutr_search_res_enternal.columns = cursor.column_names
     else: 
         nutr_search_res_enternal = pd.DataFrame()
-    if "0" in is_enternal:
+    if "0" in is_enternal and '5,6,7' in caloric and '3,4' in polim and "1,2" in sip_tube and "21, 10, 11, 12, 13" in special and '8,9' in vol:
         cursor = connection.cursor()
         cursor.execute(f"SELECT DISTINCT n0.id as nutrient_id, n0.name, n0.manufacturer, n0.is_enteral, n0.is_available FROM `nutrition` as n0 WHERE n0.is_enteral = 0;")
         nutr_search_res_not_enternal = DataFrame(cursor.fetchall())
@@ -153,7 +152,34 @@ def home():
 global test
 @app.route("/get_par_nutr", methods=["POST", "GET"])
 def get_par_nutr():
-    try:
+    if request.method == "POST":
+        nutr_type = request.form.get["nutr_type"]
+        caloric = request.form.get["caloric"]
+        polymer = request.form.get["polymer"]
+        sip_tube = request.form.get["sip_tube"]
+        spec = request.form.get["spec"]
+        fiber = request.form.get["fiber"]
+        result=f"{nutr_type+caloric}"
+        return f"{nutr_type} + {caloric} + {polymer}+ {sip_tube} + {spec} + {fiber}"
+    else: 
+        nutr_type = request.args.get("nutr_type")
+        caloric = request.args.get("caloric")
+        polymer = request.args.get("polymer")
+        sip_tube = request.args.get("sip_tube")
+        spec = request.args.get("spec")
+        fiber = request.args.get("fiber")
+        with open('readme.txt', 'a') as f:
+            f.write('\n'.join(read_params(f"{nutr_type},{caloric},{polymer},{sip_tube},{spec},{fiber}")))
+        with open('readme.txt', 'a') as f:
+            f.write(f"{nutr_type},{caloric},{polymer},{sip_tube},{spec},{fiber}")
+        test=db_nutr_table(*read_params(f"{nutr_type},{caloric},{polymer},{sip_tube},{spec},{fiber}"))
+        
+        
+        nutr=[]
+        for i in range(len(test)):
+            nutr.append(list(test.iloc[i]))
+        return render_template("index.html", nutritions=nutr)
+    """try:
         if request.method == "POST":
             nutr_type = request.form.get["nutr_type"]
             caloric = request.form.get["caloric"]
@@ -176,7 +202,7 @@ def get_par_nutr():
                 nutr.append(list(test.iloc[i]))
             return render_template("index.html", nutritions=nutr)
     except:
-        return render_template("error_page.html")
+        return render_template("error_page.html")"""
 
 @app.route("/update_db_nutr", methods=["POST"])
 def update_db_nutr():
